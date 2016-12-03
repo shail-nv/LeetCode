@@ -31,25 +31,31 @@ int myAtoi(char* str) {
     //removeUnwantedChars(str);
     
     // Find first non space char
-    while(*str == ' ')
+    while(*str == ' ' && *str != '\0')
         str++;
     
     // Now take first character out as sign and convert rest to integer while taking care of overflow
     if (*str == '-')
-        sign = -1;
-        
-    //  Convert string to a string of numbers
-    numStart = sign == -1 ? str++ : str;
-    
-    while(*numStart != '\0')
     {
-        if (*numStart < '0' || *numStart > '9')
+        sign = -1;
+        str++;
+    }
+    else if (*str == '+')
+    {
+        sign = 1;
+        str++;
+    }
+        
+    while(*str != '\0')
+    {
+        if (*str < '0' || *str > '9')
             break;
             
-        res = res*10 + (*numStart - '0');
+        res = res*10 + (*str - '0');
         if (res > INT_MAX)
-            return 0;
-        numStart++;
+            return sign == -1 ? INT_MIN : INT_MAX;
+        
+        str++;
     }
     
     return res * sign;
